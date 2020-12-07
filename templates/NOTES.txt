@@ -42,11 +42,11 @@
 
 2. Obtain the login credentials
 
-  export ODOO_EMAIL={{ .Values.paxfulEmail }}
+  export PAXFUL_EMAIL={{ .Values.paxfulEmail }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "paxful-password" "context" $) }}
 
-  echo Email   : $ODOO_EMAIL
-  echo Password: $ODOO_PASSWORD
+  echo Email   : $PAXFUL_EMAIL
+  echo Password: $PAXFUL_PASSWORD
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 

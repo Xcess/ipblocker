@@ -71,9 +71,9 @@ spec:
                 secretKeyRef:
                   name: {{ include "paxful.databaseSecretName" . }}
                   key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
-            - name: ODOO_EMAIL
+            - name: PAXFUL_EMAIL
               value: {{ .Values.paxfulEmail | quote }}
-            - name: ODOO_PASSWORD
+            - name: PAXFUL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "paxful.secretName" . }}

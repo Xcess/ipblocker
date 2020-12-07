@@ -270,7 +270,7 @@ Find more information about how to deal with common errors related to Bitnami’
 ##### Export secrets and required values to update
 
 ```console
-$ export ODOO_PASSWORD=$(kubectl get secret --namespace default paxful -o jsonpath="{.data.paxful-password}" | base64 --decode)
+$ export PAXFUL_PASSWORD=$(kubectl get secret --namespace default paxful -o jsonpath="{.data.paxful-password}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default paxful-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=paxful,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
@@ -287,7 +287,7 @@ $ kubectl delete statefulsets.apps --cascade=false paxful-postgresql
 
 ```console
 $ helm upgrade paxful bitnami/paxful \
-    --set paxfulPassword=$ODOO_PASSWORD \
+    --set paxfulPassword=$PAXFUL_PASSWORD \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```
@@ -346,13 +346,13 @@ As a consequence, backwards compatibility from previous versions is not guarante
   ```console
   $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default paxful-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 
-  $ export ODOO_PASSWORD=$(kubectl get secret --namespace default paxful-paxful -o jsonpath="{.data.paxful-password}" | base64 --decode)
+  $ export PAXFUL_PASSWORD=$(kubectl get secret --namespace default paxful-paxful -o jsonpath="{.data.paxful-password}" | base64 --decode)
   ```
 
 - The upgrade to the latest (`15.X.X`) version is going to fail
 
   ```console
-  $ helm upgrade paxful bitnami/paxful --set paxfulPassword=$ODOO_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+  $ helm upgrade paxful bitnami/paxful --set paxfulPassword=$PAXFUL_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
   Error: UPGRADE FAILED: cannot patch "paxful-paxful" with kind Deployment: Deployment.apps "paxful-paxful" is invalid: spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/instance":"paxful", "app.kubernetes.io/name":"paxful"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable
   ```
 
@@ -369,7 +369,7 @@ As a consequence, backwards compatibility from previous versions is not guarante
 - Now the upgrade works
 
   ```console
-  $ helm upgrade paxful bitnami/paxful --set paxfulPassword=$ODOO_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+  $ helm upgrade paxful bitnami/paxful --set paxfulPassword=$PAXFUL_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
   $ helm ls
   NAME  NAMESPACE REVISION  UPDATED                                STATUS   CHART       APP VERSION
   paxful  default   3         v2020-10-21 13:35:27.255118 +0200 CEST deployed paxful-15.0.0 13.0.20201010
