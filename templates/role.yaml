@@ -1,0 +1,11 @@
+{{ if .Values.ipBlocker.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: {{ template "paxful.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+rules:
+- apiGroups: ["extensions", "networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+{{- end }}

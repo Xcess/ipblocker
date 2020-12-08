@@ -23,6 +23,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{ if .Values.ipBlocker.enabled -}}
+      serviceAccountName: {{ template "paxful.fullname" . }}
+      {{- end }}
       {{- include "paxful.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -71,13 +74,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "paxful.databaseSecretName" . }}
                   key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
-            - name: PAXFUL_EMAIL
-              value: {{ .Values.paxfulEmail | quote }}
-            - name: PAXFUL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "paxful.secretName" . }}
-                  key: paxful-password
+            - name: EDIT_INGRESS
+              value: {{ .Values.ipBlocker.enabled | quote }}
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
@@ -115,7 +113,7 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 8069
+              containerPort: 80
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

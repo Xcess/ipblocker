@@ -104,7 +104,7 @@ paxfulEmail: user@example.com
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-paxful#configuration
 ##
-# paxfulPassword:
+paxfulPassword: "123"
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-paxful/#smtp-configuration
@@ -142,7 +142,7 @@ postgresql:
   ## PostgreSQL password
   ## ref: https://hub.docker.com/_/postgres/
   ##
-  # postgresqlPassword:
+  postgresqlPassword: "123"
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -190,6 +190,12 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+
+
+## Configure blocking mechanism
+ipBlocker:
+  ## Set to enable ingress editing ip blocker
+  enabled: true
 
 ## Configure the ingress resource that allows you to access the
 ## Paxful installation. Set up the URL
@@ -265,7 +271,7 @@ resources:
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
-  enabled: true
+  enabled: false
   initialDelaySeconds: 600
   periodSeconds: 30
   timeoutSeconds: 5
@@ -273,7 +279,7 @@ livenessProbe:
   successThreshold: 1
 
 readinessProbe:
-  enabled: true
+  enabled: false
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
