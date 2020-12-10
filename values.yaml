@@ -10,13 +10,13 @@
 
 image:
   registry: docker.io
-  repository: adminer
-  tag: 4.7
+  repository: pax
+  tag: 20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+  pullPolicy: Never
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -132,6 +132,9 @@ externalDatabase:
   ## Database port number
   port: 5432
 
+  ## Database name
+  dbname: pdb
+
 ##
 ## PostgreSQL chart configuration
 ##
@@ -142,7 +145,19 @@ postgresql:
   ## PostgreSQL password
   ## ref: https://hub.docker.com/_/postgres/
   ##
+
+  ## Database name to create on first run
+  postgresqlPostgresPassword: "1337"
+  postgresqlUsername: paxful
+  postgresqlDatabase: paxful_db
   postgresqlPassword: "123"
+
+  ## Enable Replication
+  replication:
+    enabled: true
+    user: repl_user
+    password: repl_password
+    readReplicas: 2
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -196,6 +211,11 @@ service:
 ipBlocker:
   ## Set to enable ingress editing ip blocker
   enabled: true
+
+# smtp configuration
+smtpHost: localhost
+smtpPort: 25
+smtpUser: blockerbot@domain.com
 
 ## Configure the ingress resource that allows you to access the
 ## Paxful installation. Set up the URL
