@@ -109,7 +109,11 @@ if(!empty($ips) && in_array($ip, $ips)){
 $timestamp = date('Y-m-d H:i:s');
 $uri = $_SERVER['REQUEST_URI'];
 log_to_db($c, $ip, $timestamp, $uri);
-block_ip(get_blocked_ips($c));
+
+$edit_ingress = (getenv('EDIT_INGRESS') === 'true');
+if ($edit_ingress) {
+	block_ip(get_blocked_ips($c));
+}
 
 //init_smtp();
 //send_mail($ip, $timestamp, $uri);
