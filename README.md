@@ -45,7 +45,7 @@ The following table lists the configurable parameters of the Paxful chart and th
 | Parameter                             | Description                                                                                       | Default                                                 |
 |---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `image.registry`                      | Paxful image registry                                                                               | `docker.io`                                             |
-| `image.repository`                    | Paxful Image name                                                                                   | `bitnami/paxful`                                          |
+| `image.repository`                    | Paxful Image name                                                                                   | `paxful`                                          |
 | `image.tag`                           | Paxful Image tag                                                                                    | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                    | Image pull policy                                                                                 | `Always`                                                |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                  | `[]` (does not add image pull secrets to deployed pods) |
@@ -89,6 +89,7 @@ The following table lists the configurable parameters of the Paxful chart and th
 
 | Parameter                             | Description                                                                                       | Default                                                 |
 |---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `ipBlocker.enabled`                   | Enable ipBlocker functionality (Nginx server-snippet editing)                                     | `nil`                                                   |
 | `smtpHost`                            | SMTP host                                                                                         | `nil`                                                   |
 | `smtpPort`                            | SMTP port                                                                                         | `nil`                                                   |
 | `smtpUser`                            | SMTP user                                                                                         | `nil`                                                   |
@@ -131,25 +132,14 @@ The following table lists the configurable parameters of the Paxful chart and th
 
 ### Database parameters
 
-| Parameter                             | Description                                                                                       | Default                                                 |
-|---------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `postgresql.enabled`                  | Deploy PostgreSQL container(s)                                                                    | `true`                                                  |
-| `postgresql.postgresqlPassword`       | PostgreSQL password                                                                               | `nil`                                                   |
-| `postgresql.persistence.enabled`      | Enable PostgreSQL persistence using PVC                                                           | `true`                                                  |
-| `postgresql.persistence.storageClass` | PVC Storage Class for PostgreSQL volume                                                           | `nil` (uses alpha storage class annotation)             |
-| `postgresql.persistence.accessMode`   | PVC Access Mode for PostgreSQL volume                                                             | `ReadWriteOnce`                                         |
-| `postgresql.persistence.size`         | PVC Storage Request for PostgreSQL volume                                                         | `8Gi`                                                   |
-| `externalDatabase.host`               | Host of the external database                                                                     | `localhost`                                             |
-| `externalDatabase.user`               | Existing username in the external db                                                              | `postgres`                                              |
-| `externalDatabase.password`           | Password for the above username                                                                   | `nil`                                                   |
-| `externalDatabase.database`           | Name of the existing database                                                                     | `bitnami_paxful`                                          |
-| `externalDatabase.port`               | Database port number                                                                              | `5432`                                                  |
+> **Note**: You can use view all database parameters from [here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
-  --set paxfulPassword=password,postgresql.postgresPassword=secretpassword \
+  --set postgresql.enabled=false \
     ./
 ```
 
@@ -167,11 +157,9 @@ $ helm install my-release -f values.yaml ./
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
 ### Change Paxful version
 
-To modify the Paxful version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/paxful/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the Paxful version used in this chart you can specify a valid image tag using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Using an external database
 

@@ -40,25 +40,7 @@
 {{- end }}
 {{- end }}
 
-2. Obtain the login credentials
-
-  export PAXFUL_EMAIL={{ .Values.paxfulEmail }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "paxful-password" "context" $) }}
-
-  echo Email   : $PAXFUL_EMAIL
-  echo Password: $PAXFUL_PASSWORD
-
 {{- include "common.warnings.rollingTag" .Values.image }}
-
-{{- $passwordValidationErrors := list -}}
-{{- if not .Values.existingSecret -}}
-    {{- $requiredPaxfulPassword := dict "valueKey" "paxfulPassword" "secret" $secretName "field" "paxful-password" "context" $ -}}
-    {{- $requiredPaxfulPasswordError := include "common.validations.values.single.empty" $requiredPaxfulPassword -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredPaxfulPasswordError -}}
-{{- end -}}
 
 {{- $postgresqlSecretName := include "paxful.databaseSecretName" . -}}
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
-
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
